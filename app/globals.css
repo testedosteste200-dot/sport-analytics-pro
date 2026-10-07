@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  min-height: 100%;
+  background: #020817;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: rgba(29, 158, 255, 0.5);
+}
+
+@layer components {
+  .glass-panel {
+    @apply rounded-2xl border border-slate-800 bg-slate-900/80 shadow-soft backdrop-blur-sm;
+  }
+
+  .primary-button {
+    @apply inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-brand-500 to-sport-accent px-4 py-2 text-sm font-semibold text-slate-950 transition hover:opacity-90;
+  }
+
+  .secondary-button {
+    @apply inline-flex items-center justify-center rounded-xl border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-brand-400 hover:text-white;
+  }
+}

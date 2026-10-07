@@ -1,0 +1,258 @@
+generator client {
+  provider = "postgresql"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ProviderType {
+  FOOTBALL
+  NEWS
+  AI
+}
+
+enum NotificationType {
+  GOAL
+  CARD_YELLOW
+  CARD_RED
+  CORNER
+  OFFSIDE
+  SUBSTITUTION
+  START
+  END
+}
+
+enum MatchStatus {
+  SCHEDULED
+  LIVE
+  PAUSED
+  FINISHED
+  POSTPONED
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  passwordHash  String
+  role          Role     @default(USER)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  profile       Profile?
+  favorites     Favorite[]
+  notifications Notification[]
+  apiLogs       ApiLog[]
+  adminLogs     AdminLog[]
+}
+
+model Profile {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  avatar         String?
+  language       String   @default("pt-BR")
+  theme          String   @default("dark")
+  notifications  Boolean  @default(true)
+  preferences    Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User     @relation(fields: [userId], references: [id])
+}
+
+model Team {
+  id              String         @id @default(cuid())
+  externalId      String?        @unique
+  name            String
+  shortName       String?
+  country         String?
+  logo            String?
+  competitionId   String?
+  competition     Competition?  @relation(fields: [competitionId], references: [id])
+  players         Player[]
+  homeMatches     Match[]        @relation("HomeTeam")
+  awayMatches     Match[]        @relation("AwayTeam")
+  standings       Standing[]
+  favorites       Favorite[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+model Player {
+  id          String   @id @default(cuid())
+  externalId  String?  @unique
+  name        String
+  position    String?
+  jersey      Int?
+  nationality String?
+  age         Int?
+  teamId      String?
+  team        Team?    @relation(fields: [teamId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Competition {
+  id          String   @id @default(cuid())
+  externalId  String?  @unique
+  name        String
+  country     String?
+  type        String?
+  logo        String?
+  teams       Team[]
+  matches     Match[]
+  standings   Standing[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Match {
+  id             String          @id @default(cuid())
+  externalId     String?         @unique
+  competitionId  String?
+  competition    Competition?   @relation(fields: [competitionId], references: [id])
+  homeTeamId     String?
+  homeTeam       Team?           @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeamId     String?
+  awayTeam       Team?           @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  homeScore      Int?
+  awayScore      Int?
+  status         MatchStatus     @default(SCHEDULED)
+  kickoffAt      DateTime?
+  venue          String?
+  matchEvents    MatchEvent[]
+  stats          MatchStatistic[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([status, kickoffAt])
+}
+
+model MatchEvent {
+  id          String         @id @default(cuid())
+  matchId     String
+  match       Match          @relation(fields: [matchId], references: [id])
+  minute      Int?
+  type        String
+  teamId      String?
+  playerName  String?
+  description String?
+  createdAt   DateTime       @default(now())
+}
+
+model MatchStatistic {
+  id             String   @id @default(cuid())
+  matchId        String
+  match          Match    @relation(fields: [matchId], references: [id])
+  teamId         String?
+  possession     Int?
+  shotsTotal     Int?
+  shotsOnTarget  Int?
+  shotsOffTarget Int?
+  corners        Int?
+  fouls          Int?
+  offsides      Int?
+  cards         Int?
+  createdAt      DateTime @default(now())
+}
+
+model Standing {
+  id            String       @id @default(cuid())
+  competitionId String?
+  competition   Competition? @relation(fields: [competitionId], references: [id])
+  teamId        String?
+  team          Team?        @relation(fields: [teamId], references: [id])
+  position      Int?
+  played        Int?
+  wins          Int?
+  draws         Int?
+  losses        Int?
+  goalsFor      Int?
+  goalsAgainst  Int?
+  goalDifference Int?
+  points        Int?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Favorite {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  type         String // team / competition / match
+  targetId     String
+  teamId       String?
+  team         Team?    @relation(fields: [teamId], references: [id])
+  createdAt    DateTime @default(now())
+
+  @@unique([userId, type, targetId])
+}
+
+model Notification {
+  id          String            @id @default(cuid())
+  userId      String
+  user        User              @relation(fields: [userId], references: [id])
+  type        NotificationType
+  title       String
+  message     String
+  read        Boolean           @default(false)
+  createdAt   DateTime          @default(now())
+}
+
+model ApiProvider {
+  id           String        @id @default(cuid())
+  name         String
+  provider     String
+  endpoint     String?
+  apiKey       String?
+  headers      Json?
+  sport        String?
+  sportType    ProviderType?
+  status       String        @default("inactive")
+  priority     Int           @default(100)
+  isActive     Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  apiLogs      ApiLog[]
+}
+
+model ApiLog {
+  id           String      @id @default(cuid())
+  providerId    String?
+  provider      ApiProvider? @relation(fields: [providerId], references: [id])
+  userId       String?
+  user         User?       @relation(fields: [userId], references: [id])
+  method       String
+  endpoint     String
+  statusCode   Int?
+  responseTime Int?
+  success      Boolean
+  errorMessage String?
+  createdAt    DateTime    @default(now())
+}
+
+model AiSetting {
+  id           String   @id @default(cuid())
+  provider     String
+  model        String?
+  temperature  Float?
+  maxTokens    Int?
+  isActive     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model AdminLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  action      String
+  details     String?
+  createdAt   DateTime @default(now())
+}
