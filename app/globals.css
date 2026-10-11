@@ -4,36 +4,73 @@
 
 :root {
   color-scheme: dark;
+  --sport-bg: #0b1118;
+  --sport-panel: #151e28;
+  --sport-border: #283542;
+  --sport-green: #a7f432;
 }
 
 html, body {
   min-height: 100%;
-  background: #020817;
+  background: var(--sport-bg);
 }
+
+html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
+  color: #eef3f7;
+  background:
+    radial-gradient(ellipse at 50% -25%, rgba(167, 244, 50, 0.07), transparent 48%),
+    var(--sport-bg);
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-::selection {
-  background: rgba(29, 158, 255, 0.5);
-}
+::selection { background: rgba(167, 244, 50, 0.35); }
+
+a { -webkit-tap-highlight-color: transparent; }
 
 @layer components {
   .glass-panel {
-    @apply rounded-2xl border border-slate-800 bg-slate-900/80 shadow-soft backdrop-blur-sm;
+    @apply rounded-xl border border-slate-800 bg-slate-900/80 shadow-soft;
+    border-color: var(--sport-border);
+    background: var(--sport-panel);
   }
 
   .primary-button {
-    @apply inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-brand-500 to-sport-accent px-4 py-2 text-sm font-semibold text-slate-950 transition hover:opacity-90;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-bold transition;
+    background: var(--sport-green);
+    color: #17210d;
   }
 
+  .primary-button:hover { filter: brightness(1.08); }
+
   .secondary-button {
-    @apply inline-flex items-center justify-center rounded-xl border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-brand-400 hover:text-white;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold transition;
+    border-color: #354453;
+    background: #18232e;
+    color: #eef3f7;
   }
+
+  .secondary-button:hover {
+    border-color: #a7f432;
+    color: #c7ff78;
+  }
+
+  .section-label {
+    @apply text-xs font-bold uppercase tracking-[0.16em];
+    color: #a7f432;
+  }
+
+  .score-empty {
+    @apply rounded-xl border border-dashed p-8 text-center;
+    border-color: #354453;
+    background: rgba(13, 20, 28, 0.7);
+  }
+}
+
+@media (max-width: 767px) {
+  body { padding-bottom: env(safe-area-inset-bottom); }
 }
