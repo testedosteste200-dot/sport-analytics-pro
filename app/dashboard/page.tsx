@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { requireUser } from '@/lib/auth';
 import { DataState } from '@/components/data-state';
 import { sportsProvider } from '@/services/sports/provider';
-import { Activity, ArrowRight, CalendarDays, ChartNoAxesCombined, Clock3, Trophy } from 'lucide-react';
+import { Activity, ArrowRight, CalendarDays, BarChart3, Clock3, Trophy } from 'lucide-react';
 
 export default async function DashboardPage() {
   await requireUser();
