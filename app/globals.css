@@ -4,36 +4,50 @@
 
 :root {
   color-scheme: dark;
+  --page: #080d18;
+  --panel: rgba(16, 24, 40, .78);
+  --line: rgba(148, 163, 184, .14);
+  --muted: #94a3b8;
+  --mint: #69f0c5;
 }
 
-html, body {
-  min-height: 100%;
-  background: #020817;
-}
-
+html, body { min-height: 100%; background: var(--page); }
+html { scroll-behavior: smooth; }
 body {
   margin: 0;
+  color: #e8eef8;
   font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(ellipse at 80% -10%, rgba(29, 158, 255, .11), transparent 38rem),
+    radial-gradient(ellipse at 0% 30%, rgba(105, 240, 197, .045), transparent 34rem),
+    var(--page);
 }
-
-* {
-  box-sizing: border-box;
-}
-
-::selection {
-  background: rgba(29, 158, 255, 0.5);
-}
+* { box-sizing: border-box; }
+::selection { background: rgba(105, 240, 197, .28); color: #fff; }
+:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
 
 @layer components {
   .glass-panel {
-    @apply rounded-2xl border border-slate-800 bg-slate-900/80 shadow-soft backdrop-blur-sm;
+    @apply rounded-2xl border bg-slate-900/70 shadow-soft backdrop-blur-xl;
+    border-color: var(--line);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, .12), inset 0 1px 0 rgba(255,255,255,.025);
   }
-
   .primary-button {
-    @apply inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-brand-500 to-sport-accent px-4 py-2 text-sm font-semibold text-slate-950 transition hover:opacity-90;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-slate-950 transition duration-200;
+    background: linear-gradient(115deg, #78f4d0, #5cc7ff);
+    box-shadow: 0 8px 24px rgba(105, 240, 197, .12);
   }
-
+  .primary-button:hover { transform: translateY(-1px); filter: brightness(1.05); }
   .secondary-button {
-    @apply inline-flex items-center justify-center rounded-xl border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-brand-400 hover:text-white;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-semibold text-slate-100 transition duration-200;
+    border-color: rgba(148,163,184,.2);
+    background: rgba(15,23,42,.72);
   }
+  .secondary-button:hover { border-color: rgba(105,240,197,.5); background: rgba(30,41,59,.9); }
+  .eyebrow { @apply text-xs font-bold uppercase tracking-[.2em]; color: #82eacb; }
+  .page-title { @apply mt-2 text-3xl font-extrabold tracking-tight text-white md:text-4xl; }
+}
+a { -webkit-tap-highlight-color: transparent; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
