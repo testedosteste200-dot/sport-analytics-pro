@@ -1,9 +1,10 @@
 import Link from 'next/link';
-import { Activity, BarChart3, Bell, Crown, Gauge, Heart, Shield, Trophy } from 'lucide-react';
+import { Activity, BarChart3, Bell, BrainCircuit, Crown, Gauge, Heart, Shield, Trophy } from 'lucide-react';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: Gauge },
   { href: '/matches', label: 'Partidas', icon: Trophy },
+  { href: '/analysis', label: 'Análise de Jogos', icon: BrainCircuit },
   { href: '/live', label: 'Ao Vivo', icon: Activity },
   { href: '/competitions', label: 'Competições', icon: BarChart3 },
   { href: '/favorites', label: 'Favoritos', icon: Heart },
