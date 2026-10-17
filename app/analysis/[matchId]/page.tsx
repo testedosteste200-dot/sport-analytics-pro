@@ -4,7 +4,7 @@ import { sportsProvider } from '@/services/sports/provider';
 import { buildMatchInsights } from '@/lib/match-analysis';
 export const dynamic = 'force-dynamic';
 export default async function MatchAnalysisDetail({ params }: { params: { matchId: string } }) {
- const [matchResult, h2hResult, statsResult] = await Promise.all([sportsProvider.getMatch(params.matchId), sportsProvider.getH2H(), sportsProvider.getStatistics()]);
+ const [matchResult, h2hResult, statsResult] = await Promise.all([sportsProvider.getMatch(params.matchId), sportsProvider.getH2H(params.matchId), sportsProvider.getStatistics()]);
  const match = matchResult.ok ? matchResult.data : null;
  const homeName = match?.homeTeam?.name ?? match?.teams?.home?.name ?? match?.home?.name ?? 'Mandante';
  const awayName = match?.awayTeam?.name ?? match?.teams?.away?.name ?? match?.away?.name ?? 'Visitante';
