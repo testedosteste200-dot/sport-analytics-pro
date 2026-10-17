@@ -100,7 +100,7 @@ export class FootballDataProvider implements SportsProvider {
     const result = await this.request<any>('/matches/' + encodeURIComponent(id) + '/head2head?limit=10');
     if (!result.ok) return { ...result, data: [] };
     const matches = result.data.matches ?? result.data.head2head?.matches ?? [];
-    return { ok: true, data: matches };
+    return { ok: true, data: matches.map((match: any) => ({ ...match, homeGoals: match.score?.fullTime?.home ?? match.score?.regularTime?.home ?? null, awayGoals: match.score?.fullTime?.away ?? match.score?.regularTime?.away ?? null })) };
   }
 
   async getEvents() {
