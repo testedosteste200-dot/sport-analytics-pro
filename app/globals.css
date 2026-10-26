@@ -8,7 +8,7 @@
 
 html, body {
   min-height: 100%;
-  background: #020817;
+  background: #050b08;
 }
 
 body {
@@ -21,12 +21,12 @@ body {
 }
 
 ::selection {
-  background: rgba(29, 158, 255, 0.5);
+  background: rgba(52, 211, 153, 0.35);
 }
 
 @layer components {
   .glass-panel {
-    @apply rounded-2xl border border-slate-800 bg-slate-900/80 shadow-soft backdrop-blur-sm;
+    @apply rounded-2xl border border-slate-800/90 bg-slate-900/75 shadow-soft backdrop-blur-sm;
   }
 
   .primary-button {
@@ -34,6 +34,6 @@ body {
   }
 
   .secondary-button {
-    @apply inline-flex items-center justify-center rounded-xl border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-brand-400 hover:text-white;
+    @apply inline-flex items-center justify-center rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-emerald-400 hover:text-white;
   }
 }

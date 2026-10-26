@@ -8,8 +8,8 @@ import { MobileNav } from '@/components/sidebar';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'SPORT ANALYTICS PRO',
-  description: 'Professional sports analytics platform with real data and API management.',
+  title: 'GreenScore Live | Inteligência Esportiva',
+  description: 'Plataforma de análise de futebol com estatísticas, tendências e inteligência esportiva.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="min-h-screen bg-slate-950">
             <div className="flex">
               <Sidebar />
-              <main className="min-h-screen flex-1 px-4 pb-24 pt-6 md:px-8 md:pb-10">
+              <main className="min-h-screen flex-1 px-3 pb-24 pt-4 sm:px-5 md:px-8 md:pb-10 md:pt-6">
                 {children}
               </main>
             </div>
